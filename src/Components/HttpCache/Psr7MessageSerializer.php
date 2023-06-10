@@ -15,6 +15,40 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @phpstan-type TRequestArray array{
+ *     body: string,
+ *     protocolVersion: string,
+ *     headers: array<string|string[]>,
+ *     type: 'request',
+ *     uri: string,
+ *     method: string,
+ *     requestTarget: string
+ * }
+ * @phpstan-type TServerRequestArray array{
+ *     body: string,
+ *     protocolVersion: string,
+ *     headers: array<string|string[]>,
+ *     type: 'server-request',
+ *     uri: string,
+ *     method: string,
+ *     serverParams: array,
+ *     requestTarget: string,
+ *     cookieParams: array,
+ *     queryParams: array,
+ *     uploadedFiles: array,
+ *     parsedBody: null|array,
+ *     attributes: array
+ * }
+ * @phpstan-type TResponseArray array{
+ *     body: string,
+ *     protocolVersion: string,
+ *     headers: array<string|string[]>,
+ *     type: 'response',
+ *     statusCode: int,
+ *     reasonPhrase: string
+ * }
+ */
 final class Psr7MessageSerializer implements Psr7MessageSerializerInterface
 {
     public function __construct(
@@ -70,23 +104,7 @@ final class Psr7MessageSerializer implements Psr7MessageSerializerInterface
         $type = $data['type'] ?? null;
 
         if ($type === 'request') {
-            try {
-                $options = $this->createRequestResolver();
-                /**
-                 * @var array{
-                 *     body: string,
-                 *     protocolVersion: string,
-                 *     headers: array<string|string[]>,
-                 *     type: 'request',
-                 *     uri: string,
-                 *     method: string,
-                 *     requestTarget: string
-                 * } $data
-                 */
-                $data = $options->resolve($data);
-            } catch (\Throwable $throwable) {
-                throw $throwable;
-            }
+            $data = $this->resolveRequestData($data);
 
             $message = $this->requestFactory->createRequest(
                 $data['method'],
@@ -95,29 +113,7 @@ final class Psr7MessageSerializer implements Psr7MessageSerializerInterface
 
             $message = $message->withRequestTarget($data['requestTarget']);
         } elseif ($type === 'server-request') {
-            try {
-                $options = $this->createServerRequestResolver();
-                /**
-                 * @var array{
-                 *     body: string,
-                 *     protocolVersion: string,
-                 *     headers: array<string|string[]>,
-                 *     type: 'server-request',
-                 *     uri: string,
-                 *     method: string,
-                 *     serverParams: array,
-                 *     requestTarget: string,
-                 *     cookieParams: array,
-                 *     queryParams: array,
-                 *     uploadedFiles: array,
-                 *     parsedBody: null|array,
-                 *     attributes: array
-                 * } $data
-                 */
-                $data = $options->resolve($data);
-            } catch (\Throwable $throwable) {
-                throw $throwable;
-            }
+            $data = $this->resolveServerRequestData($data);
 
             $message = $this->serverRequestFactory->createServerRequest(
                 $data['method'],
@@ -136,22 +132,7 @@ final class Psr7MessageSerializer implements Psr7MessageSerializerInterface
                 $message = $message->withAttribute((string) $attributeName, $attributeValue);
             }
         } elseif ($type === 'response') {
-            try {
-                $options = $this->createResponseResolver();
-                /**
-                 * @var array{
-                 *     body: string,
-                 *     protocolVersion: string,
-                 *     headers: array<string|string[]>,
-                 *     type: 'response',
-                 *     statusCode: int,
-                 *     reasonPhrase: string
-                 * } $data
-                 */
-                $data = $options->resolve($data);
-            } catch (\Throwable $throwable) {
-                throw $throwable;
-            }
+            $data = $this->resolveResponseData($data);
 
             $message = $this->responseFactory->createResponse(
                 $data['statusCode'],
@@ -239,5 +220,41 @@ final class Psr7MessageSerializer implements Psr7MessageSerializerInterface
             });
 
         return $options;
+    }
+
+    /**
+     * @return TRequestArray
+     */
+    private function resolveRequestData(array $data): array
+    {
+        $options = $this->createRequestResolver();
+        /** @var TRequestArray $result */
+        $result = $options->resolve($data);
+
+        return $result;
+    }
+
+    /**
+     * @return TServerRequestArray
+     */
+    private function resolveServerRequestData(array $data): array
+    {
+        $options = $this->createServerRequestResolver();
+        /** @var TServerRequestArray $result */
+        $result = $options->resolve($data);
+
+        return $result;
+    }
+
+    /**
+     * @return TResponseArray
+     */
+    private function resolveResponseData(array $data): array
+    {
+        $options = $this->createResponseResolver();
+        /** @var TResponseArray $result */
+        $result = $options->resolve($data);
+
+        return $result;
     }
 }
