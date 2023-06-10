@@ -6,6 +6,9 @@ namespace Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfilin
 
 final class HttpRequestCycleCollector
 {
+    /**
+     * @var HttpRequestCycle[]
+     */
     private array $httpRequestCycles = [];
 
     /**

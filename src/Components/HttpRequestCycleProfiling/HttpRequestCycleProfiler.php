@@ -107,12 +107,12 @@ final class HttpRequestCycleProfiler implements HttpRequestCycleProfilerInterfac
             ->withScheme('')
             ->withUserInfo('')
             ->withHost('')
-            ->withPort('');
+            ->withPort(null);
 
         return $request->withUri($uri);
     }
 
-    private function convertTime($beginTime): string
+    private function convertTime(float $beginTime): string
     {
         return \date_create_from_format('U.u', (string) $beginTime)->format('Y-m-d H:i:s.v');
     }
