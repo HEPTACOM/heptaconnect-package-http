@@ -15,5 +15,14 @@
         <service id="Heptacom\HeptaConnect\Package\Http\Components\HttpCache\HttpCache" autowire="true">
             <tag name="heptaconnect.http.client.middleware" priority="-200"/>
         </service>
+
+        <service id="Symfony\Component\EventDispatcher\EventDispatcherInterface"
+                 class="Symfony\Component\EventDispatcher\EventDispatcher"/>
+
+        <service id="Symfony\Contracts\EventDispatcher\EventDispatcherInterface"
+                 alias="Symfony\Component\EventDispatcher\EventDispatcherInterface"/>
+
+        <service id="Psr\EventDispatcher\EventDispatcherInterface"
+                 alias="Symfony\Component\EventDispatcher\EventDispatcherInterface"/>
     </services>
 </container>
