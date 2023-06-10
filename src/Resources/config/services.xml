@@ -6,13 +6,16 @@
 >
     <services>
         <prototype namespace="Heptacom\HeptaConnect\Package\Http\" resource="../../">
-            <exclude>../../Components/HttpCache/Event</exclude>
-            <exclude>../../Components/HttpRequestCycleProfiling/HttpRequestCycle.php</exclude>
+            <exclude>../../Components/HttpCache/Contract/Event</exclude>
+            <exclude>../../Components/HttpRequestCycleProfiling/Contract/HttpRequestCycle.php</exclude>
+            <exclude>../../Components/HttpRequestCycleProfiling/Contract/HttpRequestCycleCollector.php</exclude>
         </prototype>
 
         <service id="event_dispatcher" alias="Symfony\Component\EventDispatcher\EventDispatcherInterface"/>
 
-        <service id="Heptacom\HeptaConnect\Package\Http\Components\HttpCache\HttpCache" autowire="true">
+        <service id="Heptacom\HeptaConnect\Package\Http\Components\HttpCache\Contract\HttpCacheInterface"
+                 class="Heptacom\HeptaConnect\Package\Http\Components\HttpCache\HttpCache"
+                 autowire="true">
             <tag name="heptaconnect.http.client.middleware" priority="-200"/>
         </service>
 
