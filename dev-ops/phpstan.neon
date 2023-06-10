@@ -13,3 +13,19 @@ parameters:
 	tmpDir: ../.build/phpstan/
 	scanDirectories:
 		- ../vendor/
+	ignoreErrors:
+		# will be solved with 0.10
+		-
+			message: '#Heptacom\\HeptaConnect\\Ui\\Admin\\Base\\Contract\\Audit\\AuditableDataAwareInterface#'
+			path: ../dev-ops/bin/phpstan/src/Support/StructDetector.php
+		# will never be false, otherwise FatalError anyways
+		-
+			message: '#Cannot call method format\(\) on DateTime\|false#'
+			path: ../src/Components/HttpRequestCycleProfiling/HttpRequestCycleProfiler.php
+		-
+			message: '#that is final neither looks like a struct, extends a contract nor implements an interface#'
+			paths:
+				# use metadata array
+				- ../src/Components/HttpRequestCycleProfiling/HttpRequestCycle.php
+				# no use to make it attachable due to low usage
+				- ../src/Components/HttpRequestCycleProfiling/HttpRequestCycleCollector.php
