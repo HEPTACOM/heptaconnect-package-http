@@ -103,14 +103,4 @@ final class HttpCache implements HttpCacheInterface, HttpClientMiddlewareInterfa
 
         return $event->getCacheKey();
     }
-
-    private function shouldLoad(RequestInterface $request): bool
-    {
-        /** @var HttpCacheActiveEvent $event */
-        $event = $this->eventDispatcher->dispatch(
-            new HttpCacheActiveEvent($request)
-        );
-
-        return $event->isActive();
-    }
 }
