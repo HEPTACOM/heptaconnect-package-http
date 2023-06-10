@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [1.0.0] - 2023-06-10
+
+### Added
+
 - Add composer dependency `heptacom/heptaconnect-portal-base: ^0.9.5` as `\Heptacom\HeptaConnect\Package\Http\HttpPackage` is a package and HTTP middleware `\Heptacom\HeptaConnect\Portal\Base\Web\Http\Contract\HttpClientMiddlewareInterface` is used
 - Add composer dependencies `psr/http-client: ^1.0`, `psr/http-factory: ^1.0` and `psr/http-message: ^1.0 || ^2.0` as PSR-7 based HTTP messages are used
 - Add composer dependencies `psr/event-dispatcher: ^1.0`, `symfony/event-dispatcher: ^5.0 || ^6.0` and `symfony/event-dispatcher-contracts: ^2.0 || ^3.0` as events are dispatched
@@ -23,13 +37,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add struct `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Contract\HttpRequestCycleCollector` to store `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Contract\HttpRequestCycle` for each request in a request cycle measurement
 - Add `\Heptacom\HeptaConnect\Package\Http\DependencyInjection\EventSubscriberTagCompilerPass` as class and into the container building to register any `\Symfony\Component\EventDispatcher\EventSubscriberInterface` as active subscriber
 - Add service `Symfony\Component\EventDispatcher\EventDispatcherInterface` for class `\Symfony\Component\EventDispatcher\EventDispatcher` with aliases `event_dispatcher`, `Symfony\Contracts\EventDispatcher\EventDispatcherInterface` and `Psr\EventDispatcher\EventDispatcherInterface`
-
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
