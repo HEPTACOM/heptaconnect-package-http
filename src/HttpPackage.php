@@ -8,7 +8,6 @@ use Heptacom\HeptaConnect\Package\Http\DependencyInjection\EventSubscriberTagCom
 use Heptacom\HeptaConnect\Portal\Base\Portal\Contract\PackageContract;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class HttpPackage extends PackageContract
 {
@@ -16,8 +15,6 @@ final class HttpPackage extends PackageContract
     {
         parent::buildContainer($containerBuilder);
         $containerBuilder->addCompilerPass(new EventSubscriberTagCompilerPass());
-        $containerBuilder->addCompilerPass(
-            new RegisterListenersPass(EventDispatcherInterface::class)
-        );
+        $containerBuilder->addCompilerPass(new RegisterListenersPass());
     }
 }

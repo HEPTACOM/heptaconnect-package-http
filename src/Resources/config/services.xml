@@ -10,6 +10,8 @@
             <exclude>../../Components/HttpRequestCycleProfiling/HttpRequestCycle.php</exclude>
         </prototype>
 
+        <service id="event_dispatcher" alias="Symfony\Component\EventDispatcher\EventDispatcherInterface"/>
+
         <service id="Heptacom\HeptaConnect\Package\Http\Components\HttpCache\HttpCache" autowire="true">
             <tag name="heptaconnect.http.client.middleware" priority="-200"/>
         </service>
