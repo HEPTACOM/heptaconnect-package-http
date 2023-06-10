@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Heptacom\HeptaConnect\Package\Http\Components\HttpCache;
 
+use Heptacom\HeptaConnect\Package\Http\Components\HttpCache\Contract\Psr7MessageSerializerInterface;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;

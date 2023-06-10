@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Heptacom\HeptaConnect\Package\Http\Components\HttpCache;
 
-use Heptacom\HeptaConnect\Package\Http\Components\HttpCache\Event\HttpCacheActiveEvent;
-use Heptacom\HeptaConnect\Package\Http\Components\HttpCache\Event\HttpCacheKeyEvent;
+use Heptacom\HeptaConnect\Package\Http\Components\HttpCache\Contract\Event\HttpCacheActiveEvent;
+use Heptacom\HeptaConnect\Package\Http\Components\HttpCache\Contract\Event\HttpCacheKeyEvent;
+use Heptacom\HeptaConnect\Package\Http\Components\HttpCache\Contract\HttpCacheInterface;
+use Heptacom\HeptaConnect\Package\Http\Components\HttpCache\Contract\Psr7MessageSerializerInterface;
 use Heptacom\HeptaConnect\Portal\Base\Portal\Contract\PortalStorageInterface;
 use Heptacom\HeptaConnect\Portal\Base\Web\Http\Contract\HttpClientMiddlewareInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;

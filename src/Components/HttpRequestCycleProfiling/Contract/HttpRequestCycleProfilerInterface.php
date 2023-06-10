@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling;
+namespace Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Contract;
 
 /**
  * Profiler component to enable and disable HTTP request cycle recording
