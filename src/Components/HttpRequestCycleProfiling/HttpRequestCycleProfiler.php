@@ -12,21 +12,21 @@ use Psr\Http\Message\ResponseInterface;
 final class HttpRequestCycleProfiler implements HttpRequestCycleProfilerInterface, HttpClientMiddlewareInterface
 {
     /**
-     * @var array<array-key, array{enabled: bool, collection: HttpRequestCycleCollector}>
+     * @var array<array-key, array{enabled: bool, collector: HttpRequestCycleCollector}>
      */
-    private array $collections = [];
+    private array $collectors = [];
 
-    public function with(\Closure $fn, HttpRequestCycleCollector $collection): mixed
+    public function with(\Closure $fn, HttpRequestCycleCollector $collector): mixed
     {
-        $this->collections[] = [
+        $this->collectors[] = [
             'enabled' => true,
-            'collection' => $collection,
+            'collector' => $collector,
         ];
 
         try {
             return $fn();
         } finally {
-            \array_pop($this->collections);
+            \array_pop($this->collectors);
         }
     }
 
@@ -34,31 +34,31 @@ final class HttpRequestCycleProfiler implements HttpRequestCycleProfilerInterfac
     {
         $previousStates = [];
 
-        foreach ($this->collections as $key => $collection) {
-            $previousStates[$key] = $collection['enabled'];
-            $this->collections[$key]['enabled'] = false;
+        foreach ($this->collectors as $key => $collector) {
+            $previousStates[$key] = $collector['enabled'];
+            $this->collectors[$key]['enabled'] = false;
         }
 
         try {
             return $fn();
         } finally {
             foreach ($previousStates as $key => $enabled) {
-                $this->collections[$key]['enabled'] = $enabled;
+                $this->collectors[$key]['enabled'] = $enabled;
             }
         }
     }
 
     public function process(RequestInterface $request, ClientInterface $handler): ResponseInterface
     {
-        $enabledCollections = [];
+        $enabledCollectors = [];
 
-        foreach ($this->collections as $key => $collection) {
-            if ($collection['enabled']) {
-                $enabledCollections[$key] = $collection['collection'];
+        foreach ($this->collectors as $key => $collector) {
+            if ($collector['enabled']) {
+                $enabledCollectors[$key] = $collector['collector'];
             }
         }
 
-        if ($enabledCollections === []) {
+        if ($enabledCollectors === []) {
             return $handler->sendRequest($request);
         }
 
@@ -72,8 +72,8 @@ final class HttpRequestCycleProfiler implements HttpRequestCycleProfilerInterfac
                 null
             );
 
-            foreach ($enabledCollections as $collection) {
-                $collection->add($requestCycle);
+            foreach ($enabledCollectors as $collector) {
+                $collector->add($requestCycle);
             }
 
             throw $exception;
@@ -94,8 +94,8 @@ final class HttpRequestCycleProfiler implements HttpRequestCycleProfilerInterfac
             $metadata
         );
 
-        foreach ($enabledCollections as $collection) {
-            $collection->add($requestCycle);
+        foreach ($enabledCollectors as $collector) {
+            $collector->add($requestCycle);
         }
 
         return $response;

@@ -6,5 +6,8 @@ namespace Heptacom\HeptaConnect\Package\Http\Components\HttpCache;
 
 interface HttpCacheInterface
 {
+    /**
+     * Delete all cache items, that have been recorded in the caching storage
+     */
     public function clear(): void;
 }
