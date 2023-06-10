@@ -12,6 +12,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class Psr7MessageSerializer implements Psr7MessageSerializerInterface
 {
@@ -47,32 +49,76 @@ final class Psr7MessageSerializer implements Psr7MessageSerializerInterface
             $data['statusCode'] = $message->getStatusCode();
             $data['reasonPhrase'] = $message->getReasonPhrase();
         } else {
-            throw new \InvalidArgumentException();
+            throw new \InvalidArgumentException(\sprintf('$message is neither a "%s", "%s" nor "%s"', ServerRequestInterface::class, RequestInterface::class, ResponseInterface::class));
         }
 
         $data['protocolVersion'] = $message->getProtocolVersion();
         $data['headers'] = $message->getHeaders();
         $data['body'] = (string) $message->getBody();
 
-        $string = \json_encode($data, \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_SLASHES | \JSON_PRESERVE_ZERO_FRACTION);
-
-        return $string;
+        return \json_encode($data, \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_SLASHES | \JSON_PRESERVE_ZERO_FRACTION);
     }
 
     public function deserialize(string $string): MessageInterface
     {
         $data = \json_decode($string, true, 512, \JSON_THROW_ON_ERROR);
 
+        if (!\is_array($data)) {
+            throw new \InvalidArgumentException('$string is not a JSON encoded object');
+        }
+
         $type = $data['type'] ?? null;
 
-        if ($type == 'request') {
+        if ($type === 'request') {
+            try {
+                $options = $this->createRequestResolver();
+                /**
+                 * @var array{
+                 *     body: string,
+                 *     protocolVersion: string,
+                 *     headers: array<string|string[]>,
+                 *     type: 'request',
+                 *     uri: string,
+                 *     method: string,
+                 *     requestTarget: string
+                 * } $data
+                 */
+                $data = $options->resolve($data);
+            } catch (\Throwable $throwable) {
+                throw $throwable;
+            }
+
             $message = $this->requestFactory->createRequest(
                 $data['method'],
                 $data['uri']
             );
 
             $message = $message->withRequestTarget($data['requestTarget']);
-        } elseif ($type == 'server-request') {
+        } elseif ($type === 'server-request') {
+            try {
+                $options = $this->createServerRequestResolver();
+                /**
+                 * @var array{
+                 *     body: string,
+                 *     protocolVersion: string,
+                 *     headers: array<string|string[]>,
+                 *     type: 'server-request',
+                 *     uri: string,
+                 *     method: string,
+                 *     serverParams: array,
+                 *     requestTarget: string,
+                 *     cookieParams: array,
+                 *     queryParams: array,
+                 *     uploadedFiles: array,
+                 *     parsedBody: null|array,
+                 *     attributes: array
+                 * } $data
+                 */
+                $data = $options->resolve($data);
+            } catch (\Throwable $throwable) {
+                throw $throwable;
+            }
+
             $message = $this->serverRequestFactory->createServerRequest(
                 $data['method'],
                 $data['uri'],
@@ -82,13 +128,31 @@ final class Psr7MessageSerializer implements Psr7MessageSerializerInterface
             $message = $message->withRequestTarget($data['requestTarget']);
             $message = $message->withCookieParams($data['cookieParams']);
             $message = $message->withQueryParams($data['queryParams']);
+            // TODO test files
             $message = $message->withUploadedFiles($data['uploadedFiles']);
             $message = $message->withParsedBody($data['parsedBody']);
 
             foreach ($data['attributes'] as $attributeName => $attributeValue) {
-                $message = $message->withAttribute($attributeName, $attributeValue);
+                $message = $message->withAttribute((string) $attributeName, $attributeValue);
             }
-        } elseif ($type == 'response') {
+        } elseif ($type === 'response') {
+            try {
+                $options = $this->createResponseResolver();
+                /**
+                 * @var array{
+                 *     body: string,
+                 *     protocolVersion: string,
+                 *     headers: array<string|string[]>,
+                 *     type: 'response',
+                 *     statusCode: int,
+                 *     reasonPhrase: string
+                 * } $data
+                 */
+                $data = $options->resolve($data);
+            } catch (\Throwable $throwable) {
+                throw $throwable;
+            }
+
             $message = $this->responseFactory->createResponse(
                 $data['statusCode'],
                 $data['reasonPhrase']
@@ -100,7 +164,7 @@ final class Psr7MessageSerializer implements Psr7MessageSerializerInterface
         $message = $message->withProtocolVersion($data['protocolVersion']);
 
         foreach ($data['headers'] as $headerName => $headerValue) {
-            $message = $message->withHeader($headerName, $headerValue);
+            $message = $message->withHeader((string) $headerName, $headerValue);
         }
 
         $message = $message->withBody(
@@ -108,5 +172,72 @@ final class Psr7MessageSerializer implements Psr7MessageSerializerInterface
         );
 
         return $message;
+    }
+
+    private function createServerRequestResolver(): OptionsResolver
+    {
+        $options = $this->createRequestResolver();
+
+        $options->setAllowedValues('type', 'server-request');
+        $options->define('type')->required()->allowedTypes('string')->allowedValues(['request']);
+        $options->define('serverParams')->required()->allowedTypes('array');
+        $options->define('cookieParams')->required()->allowedTypes('array');
+        $options->define('queryParams')->required()->allowedTypes('array');
+        $options->define('uploadedFiles')->required()->allowedTypes('array');
+        $options->define('attributes')->required()->allowedTypes('array');
+        $options->define('parsedBody')->required()->allowedTypes('array', 'null');
+
+        return $options;
+    }
+
+    private function createRequestResolver(): OptionsResolver
+    {
+        $options = $this->createMessageResolver();
+
+        $options->define('type')->required()->allowedTypes('string')->allowedValues(['request']);
+        $options->define('uri')->required()->allowedTypes('string');
+        $options->define('method')->required()->allowedTypes('string');
+        $options->define('requestTarget')->required()->allowedTypes('string');
+
+        return $options;
+    }
+
+    private function createResponseResolver(): OptionsResolver
+    {
+        $options = $this->createMessageResolver();
+
+        $options->define('type')->required()->allowedTypes('string')->allowedValues(['response']);
+        $options->define('statusCode')->required()->allowedTypes('integer');
+        $options->define('reasonPhrase')->required()->allowedTypes('string');
+
+        return $options;
+    }
+
+    private function createMessageResolver(): OptionsResolver
+    {
+        $options = new OptionsResolver();
+
+        $options->define('body')->required()->allowedTypes('string');
+        $options->define('protocolVersion')->required()->allowedTypes('string');
+        $options->define('headers')->required()->allowedTypes('array')
+            ->normalize(function (Options $_, array $value): array {
+                foreach ($value as $item) {
+                    if (!\is_string($item) && !\is_array($item)) {
+                        throw new \InvalidArgumentException('Header values must be a string or an array of strings');
+                    }
+
+                    if (\is_array($item)) {
+                        foreach ($item as $nestedItem) {
+                            if (!\is_string($nestedItem)) {
+                                throw new \InvalidArgumentException('Nested header values must be strings');
+                            }
+                        }
+                    }
+                }
+
+                return $value;
+            });
+
+        return $options;
     }
 }

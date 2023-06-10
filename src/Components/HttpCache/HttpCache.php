@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Heptacom\HeptaConnect\Package\Http\Components\HttpCache;
 
-use Heptacom\HeptaConnect\Portal\Base\Portal\Contract\PortalStorageInterface;
-use Heptacom\HeptaConnect\Package\Http\Components\HttpCache\Event\HttpCacheKeyEvent;
 use Heptacom\HeptaConnect\Package\Http\Components\HttpCache\Event\HttpCacheActiveEvent;
+use Heptacom\HeptaConnect\Package\Http\Components\HttpCache\Event\HttpCacheKeyEvent;
+use Heptacom\HeptaConnect\Portal\Base\Portal\Contract\PortalStorageInterface;
 use Heptacom\HeptaConnect\Portal\Base\Web\Http\Contract\HttpClientMiddlewareInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class HttpCache implements HttpCacheInterface, HttpClientMiddlewareInterface
 {
@@ -57,8 +57,13 @@ final class HttpCache implements HttpCacheInterface, HttpClientMiddlewareInterfa
 
     public function clear(): void
     {
+        /** @var iterable<string> $keys */
         $keys = (function (): iterable {
             foreach ($this->portalStorage->list() as $key => $_) {
+                if (!\is_string($key)) {
+                    continue;
+                }
+
                 if (\str_starts_with($key, self::KEY_PREFIX)) {
                     yield $key;
                 }

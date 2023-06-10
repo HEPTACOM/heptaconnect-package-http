@@ -9,6 +9,11 @@
     <issueHandlers>
         <LessSpecificReturnType errorLevel="info" />
         <ImplicitToStringCast errorLevel="info" />
+        <MixedAssignment>
+            <errorLevel type="info">
+                <file name="../src/Components/HttpCache/Psr7MessageSerializer.php"/>
+            </errorLevel>
+        </MixedAssignment>
     </issueHandlers>
 
     <plugins>

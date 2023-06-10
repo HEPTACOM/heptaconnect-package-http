@@ -10,11 +10,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class EventSubscriberTagCompilerPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
-        foreach ($container->getDefinitions() as $definition) {
+        foreach ($container->getDefinitions() as $id => $definition) {
+            $id = $definition->getClass() ?? $id;
+
             if (
-                \is_a($definition->getClass(), EventSubscriberInterface::class, true)
+                \is_a($id, EventSubscriberInterface::class, true)
                 && !$definition->hasTag('kernel.event_subscriber')
             ) {
                 $definition->addTag('kernel.event_subscriber');

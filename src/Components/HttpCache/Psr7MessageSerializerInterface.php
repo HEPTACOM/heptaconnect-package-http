@@ -10,5 +10,5 @@ interface Psr7MessageSerializerInterface
 {
     public function serialize(MessageInterface $message): string;
 
-    public function deserialize(string $message): MessageInterface;
+    public function deserialize(string $string): MessageInterface;
 }
