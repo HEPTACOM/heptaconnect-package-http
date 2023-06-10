@@ -161,7 +161,7 @@ final class Psr7MessageSerializer implements Psr7MessageSerializerInterface
         $options = $this->createRequestResolver();
 
         $options->setAllowedValues('type', 'server-request');
-        $options->define('type')->required()->allowedTypes('string')->allowedValues(['request']);
+        $options->define('type')->required()->allowedTypes('string')->allowedValues('request');
         $options->define('serverParams')->required()->allowedTypes('array');
         $options->define('cookieParams')->required()->allowedTypes('array');
         $options->define('queryParams')->required()->allowedTypes('array');
@@ -176,7 +176,7 @@ final class Psr7MessageSerializer implements Psr7MessageSerializerInterface
     {
         $options = $this->createMessageResolver();
 
-        $options->define('type')->required()->allowedTypes('string')->allowedValues(['request']);
+        $options->define('type')->required()->allowedTypes('string')->allowedValues('request');
         $options->define('uri')->required()->allowedTypes('string');
         $options->define('method')->required()->allowedTypes('string');
         $options->define('requestTarget')->required()->allowedTypes('string');
@@ -188,7 +188,7 @@ final class Psr7MessageSerializer implements Psr7MessageSerializerInterface
     {
         $options = $this->createMessageResolver();
 
-        $options->define('type')->required()->allowedTypes('string')->allowedValues(['response']);
+        $options->define('type')->required()->allowedTypes('string')->allowedValues('response');
         $options->define('statusCode')->required()->allowedTypes('integer');
         $options->define('reasonPhrase')->required()->allowedTypes('string');
 
