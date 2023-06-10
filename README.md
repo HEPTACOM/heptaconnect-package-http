@@ -10,6 +10,9 @@ Read more in the [documentation](https://heptaconnect.io/).
 ### Features
 
 * Cache for outbound HTTP requests
+* Profiling for HTTP request cycles
+
+
 ## System requirements
 
 * PHP 8.0 or above
