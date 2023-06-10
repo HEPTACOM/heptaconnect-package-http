@@ -7,6 +7,9 @@ This is a HEPTAconnect package to support flow components working with HTTP clie
 Read more in the [documentation](https://heptaconnect.io/).
 
 
+### Features
+
+* Cache for outbound HTTP requests
 ## System requirements
 
 * PHP 8.0 or above
