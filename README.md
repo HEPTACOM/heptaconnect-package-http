@@ -1,9 +1,9 @@
-# repo-base
+# HTTP Package
 #### This is part of HEPTACOM solutions for medium and large enterprises.
 
 ## Description
 
-This is a HEPTAconnect package.
+This is a HEPTAconnect package to support flow components working with HTTP clients or act as HTTP server.
 Read more in the [documentation](https://heptaconnect.io/).
 
 
@@ -25,13 +25,13 @@ See the attached [CHANGELOG.md](./CHANGELOG.md) file for a complete version hist
 
 ## Contributing
 
-Thank you for considering contributing to this package! Be sure to sign the [CLA](./CLA.md) after creating the pull request. [![CLA assistant](https://cla-assistant.io/readme/badge/HEPTACOM/heptaconnect-repo-base)](https://cla-assistant.io/HEPTACOM/heptaconnect-repo-base)
+Thank you for considering contributing to this package! Be sure to sign the [CLA](./CLA.md) after creating the pull request. [![CLA assistant](https://cla-assistant.io/readme/badge/HEPTACOM/heptaconnect-package-http)](https://cla-assistant.io/HEPTACOM/heptaconnect-package-http)
 
 
 ### Steps to contribute
 
 1. Fork the repository
-2. `git clone yourname/heptaconnect-repo-base`
+2. `git clone yourname/heptaconnect-package-http`
 3. Make your changes to master branch
 4. Create your Pull-Request
 

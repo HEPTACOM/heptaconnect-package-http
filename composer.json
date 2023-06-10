@@ -1,14 +1,15 @@
 {
-    "name": "heptacom/heptaconnect-repository-base",
-    "description": "HEPTAconnect package",
+    "name": "heptacom/heptaconnect-package-http",
+    "description": "HEPTAconnect Package for HTTP",
     "license": [
         "AGPL-3.0-or-later",
         "proprietary"
     ],
     "type": "library",
     "keywords": [
-        "heptaconnect-dataset",
-        "heptaconnect-adapter"
+        "heptaconnect",
+        "heptaconnect-package",
+        "http"
     ],
     "authors": [
         {
@@ -16,8 +17,8 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/HEPTACOM/heptaconnect-repository-base/issues",
-        "source": "https://github.com/HEPTACOM/heptaconnect-repository-base",
+        "issues": "https://github.com/HEPTACOM/heptaconnect-package-http/issues",
+        "source": "https://github.com/HEPTACOM/heptaconnect-package-http",
         "docs": "https://heptaconnect.io/",
         "rss": "https://heptaconnect.io/news/rss2.xml"
     },
@@ -39,12 +40,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Heptacom\\HeptaConnect\\": "src/"
+            "Heptacom\\HeptaConnect\\Package\\Http\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Heptacom\\HeptaConnect\\Test\\": "test/"
+            "Heptacom\\HeptaConnect\\Package\\Http\\Test\\": "test/"
         }
     },
     "config": {
