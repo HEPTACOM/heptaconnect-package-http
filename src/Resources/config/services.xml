@@ -9,6 +9,7 @@
             <exclude>../../Components/HttpCache/Contract/Event</exclude>
             <exclude>../../Components/HttpRequestCycleProfiling/Contract/HttpRequestCycle.php</exclude>
             <exclude>../../Components/HttpRequestCycleProfiling/Contract/HttpRequestCycleCollector.php</exclude>
+            <exclude>../../Components/HttpRequestCycleProfiling/Modifier/*.php</exclude>
         </prototype>
 
         <service id="event_dispatcher" alias="Symfony\Component\EventDispatcher\EventDispatcherInterface"/>

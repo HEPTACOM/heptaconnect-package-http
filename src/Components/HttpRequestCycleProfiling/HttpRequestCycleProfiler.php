@@ -6,7 +6,9 @@ namespace Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfilin
 
 use Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Contract\HttpRequestCycle;
 use Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Contract\HttpRequestCycleCollector;
+use Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Contract\HttpRequestCycleModifierInterface;
 use Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Contract\HttpRequestCycleProfilerInterface;
+use Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Modifier\RequestUrlModifier;
 use Heptacom\HeptaConnect\Portal\Base\Web\Http\Contract\HttpClientMiddlewareInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
@@ -18,6 +20,19 @@ final class HttpRequestCycleProfiler implements HttpRequestCycleProfilerInterfac
      * @var array<array-key, array{enabled: bool, collector: HttpRequestCycleCollector}>
      */
     private array $collectors = [];
+
+    private HttpRequestCycleModifierInterface $fallbackModifier;
+
+    public function __construct()
+    {
+        $this->fallbackModifier = new RequestUrlModifier(
+            ['/.*/', ''],
+            ['/.*/', ''],
+            ['/.*/', ''],
+            ['/.*/', '']
+        );
+    }
+
 
     public function with(\Closure $fn, HttpRequestCycleCollector $collector): mixed
     {
@@ -70,13 +85,14 @@ final class HttpRequestCycleProfiler implements HttpRequestCycleProfilerInterfac
         try {
             $response = $handler->sendRequest($request);
         } catch (\Throwable $exception) {
-            $requestCycle = new HttpRequestCycle(
-                $this->convertRequest($request),
-                null
-            );
+            $requestCycle = new HttpRequestCycle($request, null);
 
             foreach ($enabledCollectors as $collector) {
-                $collector->add($requestCycle);
+                if ($collector->getModifiers() === []) {
+                    $collector->add($this->fallbackModifier->modify($requestCycle));
+                } else {
+                    $collector->add($requestCycle);
+                }
             }
 
             throw $exception;
@@ -91,28 +107,17 @@ final class HttpRequestCycleProfiler implements HttpRequestCycleProfilerInterfac
             'Time finish' => $this->convertTime($endTime),
         ];
 
-        $requestCycle = new HttpRequestCycle(
-            $this->convertRequest($request),
-            $response,
-            $metadata
-        );
+        $requestCycle = new HttpRequestCycle($request, $response, $metadata);
 
         foreach ($enabledCollectors as $collector) {
-            $collector->add($requestCycle);
+            if ($collector->getModifiers() === []) {
+                $collector->add($this->fallbackModifier->modify($requestCycle));
+            } else {
+                $collector->add($requestCycle);
+            }
         }
 
         return $response;
-    }
-
-    private function convertRequest(RequestInterface $request): RequestInterface
-    {
-        $uri = $request->getUri()
-            ->withScheme('')
-            ->withUserInfo('')
-            ->withHost('')
-            ->withPort(null);
-
-        return $request->withUri($uri);
     }
 
     private function convertTime(float $beginTime): string
