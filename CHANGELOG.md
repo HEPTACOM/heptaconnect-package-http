@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [1.1.0] - 2023-09-02
+
+### Added
+
 - Add interface `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Contract\HttpRequestCycleModifierInterface` to build components, that will be used to modify recorded HTTP request cycles
 - Add methods `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Contract\HttpRequestCycleCollector::withAddedModifier`, `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Contract\HttpRequestCycleCollector::withoutModifiers`, `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Contract\HttpRequestCycleCollector::getModifiers` to manage `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Contract\HttpRequestCycleModifierInterface` that will be applied when collecting request cycles
 - Add request cycle modifier class `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Modifier\HeaderValueReplacingModifier` to replace header values using RegEx patterns
@@ -25,12 +39,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 
 - Deprecate expected request URL modification in `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\HttpRequestCycleProfiler`. Expect to always add `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Modifier\RequestUrlModifier` to collectors
-
-### Removed
-
-### Fixed
-
-### Security
 
 ## [1.0.0] - 2023-06-10
 
