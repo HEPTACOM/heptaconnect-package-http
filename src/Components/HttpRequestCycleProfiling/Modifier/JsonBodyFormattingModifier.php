@@ -18,7 +18,7 @@ final class JsonBodyFormattingModifier extends AbstractBodyModifier
         bool $formatResponse = true,
         bool $failSilent = true,
         array $mimeTypePattern = ['#^application/json.*#'],
-        private ?int $jsonEncodeFlags = \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES
+        private int $jsonEncodeFlags = \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES
     ) {
         parent::__construct(
             $streamFactory,
@@ -32,7 +32,7 @@ final class JsonBodyFormattingModifier extends AbstractBodyModifier
 
     protected function formatBodyContent(string $body): string
     {
-        return (string) \json_encode(
+        return \json_encode(
             \json_decode($body, true, 512, \JSON_THROW_ON_ERROR),
             $this->jsonEncodeFlags | \JSON_THROW_ON_ERROR
         );

@@ -63,14 +63,14 @@ final class HeaderValueReplacingModifier implements HttpRequestCycleModifierInte
     {
         foreach ($this->replacementPatterns as $key => [$match, $replace]) {
             foreach (\array_keys($message->getHeaders()) as $headerName) {
-                if (\preg_match($key, $headerName) === 1) {
-                    $headers = $message->getHeader($headerName);
+                if (\preg_match($key, (string) $headerName) === 1) {
+                    $headers = $message->getHeader((string) $headerName);
 
                     foreach ($headers as &$headerValue) {
                         $headerValue = \preg_replace($match, $replace, $headerValue);
                     }
 
-                    $message = $message->withHeader($headerName, $headers);
+                    $message = $message->withHeader((string) $headerName, $headers);
                 }
             }
         }

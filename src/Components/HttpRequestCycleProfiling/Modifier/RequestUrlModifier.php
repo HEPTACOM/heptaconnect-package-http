@@ -42,18 +42,18 @@ final class RequestUrlModifier implements HttpRequestCycleModifierInterface
         $uri = $request->getUri();
 
         if (\is_array($this->schemeReplacement)) {
-            $uri = $uri->withScheme(\preg_replace($this->schemeReplacement[0], $this->schemeReplacement[1], $uri->getScheme()));
+            $uri = $uri->withScheme(\preg_replace($this->schemeReplacement[0], $this->schemeReplacement[1], $uri->getScheme()) ?? '');
         }
 
         if (\is_array($this->userInfoReplacement)) {
-            $userInfoValue = \preg_replace($this->userInfoReplacement[0], $this->userInfoReplacement[1], $uri->getUserInfo());
+            $userInfoValue = \preg_replace($this->userInfoReplacement[0], $this->userInfoReplacement[1], $uri->getUserInfo()) ?? '';
             $userInfo = \explode(':', $userInfoValue, 2);
 
             $uri = $uri->withUserInfo($userInfo[0], $userInfo[1] ?? null);
         }
 
         if (\is_array($this->hostReplacement)) {
-            $uri = $uri->withHost(\preg_replace($this->hostReplacement[0], $this->hostReplacement[1], $uri->getHost()));
+            $uri = $uri->withHost(\preg_replace($this->hostReplacement[0], $this->hostReplacement[1], $uri->getHost()) ?? '');
         }
 
         if (\is_array($this->portReplacement)) {
@@ -69,15 +69,15 @@ final class RequestUrlModifier implements HttpRequestCycleModifierInterface
         }
 
         if (\is_array($this->pathReplacement)) {
-            $uri = $uri->withPath(\preg_replace($this->pathReplacement[0], $this->pathReplacement[1], $uri->getPath()));
+            $uri = $uri->withPath(\preg_replace($this->pathReplacement[0], $this->pathReplacement[1], $uri->getPath()) ?? '');
         }
 
         if (\is_array($this->queryReplacement)) {
-            $uri = $uri->withQuery(\preg_replace($this->queryReplacement[0], $this->queryReplacement[1], $uri->getQuery()));
+            $uri = $uri->withQuery(\preg_replace($this->queryReplacement[0], $this->queryReplacement[1], $uri->getQuery()) ?? '');
         }
 
         if (\is_array($this->fragmentReplacement)) {
-            $uri = $uri->withFragment(\preg_replace($this->fragmentReplacement[0], $this->fragmentReplacement[1], $uri->getFragment()));
+            $uri = $uri->withFragment(\preg_replace($this->fragmentReplacement[0], $this->fragmentReplacement[1], $uri->getFragment()) ?? '');
         }
 
         return $request->withUri($uri);
