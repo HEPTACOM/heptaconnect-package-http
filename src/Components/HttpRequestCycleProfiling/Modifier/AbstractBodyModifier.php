@@ -35,7 +35,7 @@ abstract class AbstractBodyModifier implements HttpRequestCycleModifierInterface
     /**
      * Modify the body content.
      */
-    protected abstract function formatBodyContent(string $body): string;
+    abstract protected function formatBodyContent(string $body): string;
 
     private function passContentLengthThresholdTest(MessageInterface $message): bool
     {
@@ -117,7 +117,9 @@ abstract class AbstractBodyModifier implements HttpRequestCycleModifierInterface
 
     /**
      * @template T of ResponseInterface|RequestInterface
+     *
      * @param T $message
+     *
      * @return T
      */
     private function formatMessage(ResponseInterface|RequestInterface $message): ResponseInterface|RequestInterface
@@ -138,6 +140,6 @@ abstract class AbstractBodyModifier implements HttpRequestCycleModifierInterface
             return $message;
         }
 
-        return $message->withHeader('Content-Length', [(string)$newLength]);
+        return $message->withHeader('Content-Length', [(string) $newLength]);
     }
 }

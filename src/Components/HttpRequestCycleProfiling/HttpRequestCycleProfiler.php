@@ -33,7 +33,6 @@ final class HttpRequestCycleProfiler implements HttpRequestCycleProfilerInterfac
         );
     }
 
-
     public function with(\Closure $fn, HttpRequestCycleCollector $collector): mixed
     {
         $this->collectors[] = [

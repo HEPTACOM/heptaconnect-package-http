@@ -40,11 +40,11 @@
         "infection/infection": ">=0.21",
         "phpunit/phpunit": ">=9.3 <10"
     },
-    "suggest": {
-        "ext-dom": "Allow XML formatting"
-    },
     "conflict": {
         "nikic/php-parser": "4.7.0"
+    },
+    "suggest": {
+        "ext-dom": "Allow XML formatting"
     },
     "repositories": {
         "heptaconnect-sources": {

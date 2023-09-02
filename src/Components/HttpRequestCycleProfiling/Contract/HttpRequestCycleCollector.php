@@ -56,6 +56,7 @@ final class HttpRequestCycleCollector
     {
         $that = clone $this;
         $that->modifiers = [];
+
         return $that;
     }
 }

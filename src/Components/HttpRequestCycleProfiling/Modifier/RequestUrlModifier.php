@@ -48,7 +48,7 @@ final class RequestUrlModifier implements HttpRequestCycleModifierInterface
         }
 
         if (\is_array($this->portReplacement)) {
-            $portValue = \preg_replace($this->portReplacement[0], $this->portReplacement[1], (string)$uri->getPort());
+            $portValue = \preg_replace($this->portReplacement[0], $this->portReplacement[1], (string) $uri->getPort());
 
             if (\is_numeric($portValue)) {
                 $port = (int) $portValue;

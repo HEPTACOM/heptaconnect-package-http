@@ -50,7 +50,9 @@ final class HeaderValueReplacingModifier implements HttpRequestCycleModifierInte
 
     /**
      * @template T of ResponseInterface|RequestInterface
+     *
      * @param T $message
+     *
      * @return T
      */
     private function replaceMessage(ResponseInterface|RequestInterface $message): ResponseInterface|RequestInterface
