@@ -12,7 +12,8 @@
         "Phar",
         "Reflection",
         "SPL",
-        "standard"
+        "standard",
+        "dom"
     ],
     "scan-files" : []
 }
