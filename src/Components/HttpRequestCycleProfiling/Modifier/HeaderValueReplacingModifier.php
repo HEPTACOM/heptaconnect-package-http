@@ -6,11 +6,15 @@ namespace Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfilin
 
 use Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Contract\HttpRequestCycle;
 use Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Contract\HttpRequestCycleModifierInterface;
+use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 final class HeaderValueReplacingModifier implements HttpRequestCycleModifierInterface
 {
+    /**
+     * @param array<string, array{string, string}> $replacementPatterns
+     */
     public function __construct(
         private array $replacementPatterns,
         private bool $replaceRequest = true,
@@ -49,13 +53,13 @@ final class HeaderValueReplacingModifier implements HttpRequestCycleModifierInte
     }
 
     /**
-     * @template T of ResponseInterface|RequestInterface
+     * @template T of MessageInterface
      *
      * @param T $message
      *
      * @return T
      */
-    private function replaceMessage(ResponseInterface|RequestInterface $message): ResponseInterface|RequestInterface
+    private function replaceMessage(mixed $message): mixed
     {
         foreach ($this->replacementPatterns as $key => [$match, $replace]) {
             foreach (\array_keys($message->getHeaders()) as $headerName) {

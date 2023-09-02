@@ -8,6 +8,9 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 final class JsonBodyFormattingModifier extends AbstractBodyModifier
 {
+    /**
+     * @param string[] $mimeTypePattern
+     */
     public function __construct(
         StreamFactoryInterface $streamFactory,
         ?int $lengthThreshold = null,

@@ -10,6 +10,15 @@ use Psr\Http\Message\RequestInterface;
 
 final class RequestUrlModifier implements HttpRequestCycleModifierInterface
 {
+    /**
+     * @param array{string, string}|null $schemeReplacement
+     * @param array{string, string}|null $userInfoReplacement
+     * @param array{string, string}|null $hostReplacement
+     * @param array{string, string}|null $portReplacement
+     * @param array{string, string}|null $pathReplacement
+     * @param array{string, string}|null $queryReplacement
+     * @param array{string, string}|null $fragmentReplacement
+     */
     public function __construct(
         private ?array $schemeReplacement = null,
         private ?array $userInfoReplacement = null,

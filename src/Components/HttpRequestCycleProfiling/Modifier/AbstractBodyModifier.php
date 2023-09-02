@@ -14,6 +14,9 @@ use Psr\Http\Message\StreamInterface;
 
 abstract class AbstractBodyModifier implements HttpRequestCycleModifierInterface
 {
+    /**
+     * @param string[] $mimeTypePattern
+     */
     public function __construct(
         private StreamFactoryInterface $streamFactory,
         private ?int $lengthThreshold = null,
@@ -116,13 +119,13 @@ abstract class AbstractBodyModifier implements HttpRequestCycleModifierInterface
     }
 
     /**
-     * @template T of ResponseInterface|RequestInterface
+     * @template T of MessageInterface
      *
      * @param T $message
      *
      * @return T
      */
-    private function formatMessage(ResponseInterface|RequestInterface $message): ResponseInterface|RequestInterface
+    private function formatMessage(mixed $message): mixed
     {
         if (!$this->passContentLengthThresholdTest($message)) {
             return $message;
