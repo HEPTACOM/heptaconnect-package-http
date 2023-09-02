@@ -43,6 +43,9 @@
     "conflict": {
         "nikic/php-parser": "4.7.0"
     },
+    "suggest": {
+        "ext-dom": "Allow XML formatting"
+    },
     "repositories": {
         "heptaconnect-sources": {
             "type": "path",

@@ -9,9 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add interface `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Contract\HttpRequestCycleModifierInterface` to build components, that will be used to modify recorded HTTP request cycles
+- Add methods `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Contract\HttpRequestCycleCollector::withAddedModifier`, `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Contract\HttpRequestCycleCollector::withoutModifiers`, `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Contract\HttpRequestCycleCollector::getModifiers` to manage `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Contract\HttpRequestCycleModifierInterface` that will be applied when collecting request cycles
+- Add request cycle modifier class `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Modifier\HeaderValueReplacingModifier` to replace header values using RegEx patterns
+- Add request cycle modifier class `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Modifier\RequestUrlModifier` to replace request URL parts using RegEx patterns
+- Add base class `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Modifier\AbstractBodyModifier` to build modifiers depending on the body's mimetype
+- Add request cycle modifier class `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Modifier\JsonBodyFormattingModifier` to format request and response bodies that are of mimetype `application/json`
+- Add request cycle modifier class `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Modifier\XmlBodyFormattingModifier` to format request and response bodies that are of mimetype `application/xml`
+- Add composer suggestion to allow `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Modifier\XmlBodyFormattingModifier` to work
+
 ### Changed
 
+- Prevent request URL modification in `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\HttpRequestCycleProfiler`, when collector has modifiers assigned 
+
 ### Deprecated
+
+- Deprecate expected request URL modification in `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\HttpRequestCycleProfiler`. Expect to always add `\Heptacom\HeptaConnect\Package\Http\Components\HttpRequestCycleProfiling\Modifier\RequestUrlModifier` to collectors
 
 ### Removed
 

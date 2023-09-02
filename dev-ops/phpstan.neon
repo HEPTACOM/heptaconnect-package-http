@@ -22,10 +22,6 @@ parameters:
 		-
 			message: '#Cannot call method format\(\) on DateTime\|false#'
 			path: ../src/Components/HttpRequestCycleProfiling/HttpRequestCycleProfiler.php
-		-
-			message: '#that is final neither looks like a struct, extends a contract nor implements an interface#'
-			paths:
-				# use metadata array
-				- ../src/Components/HttpRequestCycleProfiling/HttpRequestCycle.php
-				# no use to make it attachable due to low usage
-				- ../src/Components/HttpRequestCycleProfiling/HttpRequestCycleCollector.php
+		# use metadata array in src/Components/HttpRequestCycleProfiling/HttpRequestCycle.php
+		# no use to make it attachable due to low usage in src/Components/HttpRequestCycleProfiling/HttpRequestCycleCollector.php
+		- '#that is final neither looks like a struct, extends a contract nor implements an interface#'
